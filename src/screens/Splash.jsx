@@ -1,28 +1,47 @@
-import React from "react";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
-import { useFonts } from "expo-font";
+import React, { useLayoutEffect } from 'react'
+import { Animated, SafeAreaView, StatusBar, Text, View } from 'react-native'
+import Title from '../common/Title'
 
-function SplashScreen() {
-  let [fontLoaded] = useFonts({
-    "Fredoka-Regular": require("../assets/fonts/Fredoka-Regular.ttf")
-  })
+function SplashScreen({ navigation }) {
+	useLayoutEffect(() => {
+		navigation.setOptions({
+			headerShown: false,
+		})
+	}, [])
 
-  return (
-    <SafeAreaView 
-      style = {{
-        alignItems: 'center', 
-        flex: 1, 
-        justifyContent: 'center', 
-        backgroundColor: "black"
-        }}
-    >
-      <StatusBar barStyle='light-content'/>
-      <View>
-        <Text style={{color: "white", textAlign: 'center', fontSize: 48, fontFamily: 'Fredoka-Regular'}}>RealTimeChat</Text>
-      </View>
-    </SafeAreaView>
-  )
+	const translateY = new Animated.Value(0)
+
+	Animated.loop(
+		Animated.sequence([
+			Animated.timing(translateY, {
+				toValue: 10,
+				duration: 1000,
+				useNativeDriver: true,
+			}),
+			Animated.timing(translateY, {
+				toValue: 0,
+				duration: 1000,
+				useNativeDriver: true,
+			}),
+		])
+	).start()
+
+	return (
+		<SafeAreaView
+			style={{
+				alignItems: 'center',
+				flex: 1,
+				justifyContent: 'center',
+				backgroundColor: '#ffdddd',
+			}}
+		>
+			<StatusBar barStyle="light-content" />
+
+			<Animated.View style={{ transform: [{ translateY }] }}>
+				<Title text={'RealTimeChat'} color={'#fafafa'} size={48} />
+			</Animated.View>
+		</SafeAreaView>
+	)
 }
-
 
 export default SplashScreen
